@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Clock from "./_components/Clock";
 import Today from "./_components/Today";
+import { Button } from "../components/ui/button";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
         <div className="lx:gap-20 flex flex-col gap-6 sm:gap-8 md:gap-8 lg:gap-16">
           <Today />
           <Clock />
+          <Button>Click me</Button>
         </div>
       </main>
     </>
