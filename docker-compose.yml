@@ -1,0 +1,11 @@
+version: "3.7"
+services:
+  react:
+    build:
+      args:
+        - NODE_VER=20.12.0
+      context: .
+      dockerfile: Dockerfile
+    tty: true
+    volumes:
+      - .:/home/node/app
