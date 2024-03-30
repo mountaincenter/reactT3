@@ -16,7 +16,11 @@ const Today = () => {
     }, 1000);
     return () => clearInterval(interval);
   }, []);
-  return <TextAtom size="medium">{today}</TextAtom>;
+  return (
+    <>
+      <TextAtom size="small">{today}</TextAtom>
+    </>
+  );
 };
 
 export default Today;
