@@ -1,11 +1,11 @@
 import Head from "next/head";
 import React from "react";
-import Clock from "./_components/Clock";
-import Today from "./_components/Today";
-import LoginAvatar from "./_components/LoninAvatar";
-import { ModeToggle } from "./_components/DarkMode";
+import Clock from "../components/Clock";
+import Today from "../components/Today";
+import LoginAvatar from "../components/LoninAvatar";
+import { ModeToggle } from "../components/DarkMode";
 import { useSession } from "next-auth/react";
-import KeepRecordButton from "./_components/KeepRecordButton";
+import KeepRecordButton from "../components/KeepRecordButton";
 
 export default function Home() {
   const { data: session } = useSession();

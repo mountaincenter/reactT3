@@ -3,7 +3,7 @@ import { SessionProvider } from "next-auth/react";
 import { type AppType } from "next/app";
 import { Inter as FontSans } from "next/font/google";
 import { cn } from "../lib/utils";
-import { ThemeProvider } from "./_components/theme-provider";
+import { ThemeProvider } from "../components/theme-provider";
 
 import { api } from "~/utils/api";
 
@@ -21,7 +21,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <SessionProvider session={session}>
       <main
         className={cn(
-          "bg-background min-h-screen font-sans antialiased",
+          "min-h-screen bg-background font-sans antialiased",
           fontSans.variable,
         )}
       >
