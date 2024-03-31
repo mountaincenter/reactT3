@@ -1,36 +1,45 @@
 {
   "name": "procject-dev",
-  "dockerComposeFile": [
-      "../docker-compose.yml"
-  ],
+  "dockerComposeFile": ["../docker-compose.yml"],
   "service": "react",
   "workspaceFolder": "/home/node/app",
   "customizations": {
-      "vscode": {
-          "extensions": [
-            "esbenp.prettier-vscode",
-            "dbaeumer.vscode-eslint",
-            "dsznajder.es7-react-js-snippets",
-            "VisualStudioExptTeam.vscodeintellicode",
-            "christian-kohler.path-intellisense",
-            "mhutchie.git-graph",
-            "donjayamanne.githistory",
-            "oderwat.indent-rainbow",
-            "formulahendry.auto-rename-tag",
-            "vscode-icons-team.vscode-icons",
-            "MariusAlchimavicius.json-to-ts",
-            "wix.vscode-import-cost",
-            "Prisma.prisma"
-          ],
-          "settings": {
-              "files.encoding": "utf8",
-              "files.eol": "\n",
-              "editor.defaultFormatter": "esbenp.prettier-vscode",
-              "": {
-                  "editor.defaultFormatter": "esbenp.prettier-vscode"
-              }
-          }
+    "vscode": {
+      "extensions": [
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "dsznajder.es7-react-js-snippets",
+        "VisualStudioExptTeam.vscodeintellicode",
+        "christian-kohler.path-intellisense",
+        "mhutchie.git-graph",
+        "donjayamanne.githistory",
+        "oderwat.indent-rainbow",
+        "formulahendry.auto-rename-tag",
+        "vscode-icons-team.vscode-icons",
+        "MariusAlchimavicius.json-to-ts",
+        "wix.vscode-import-cost",
+        "Prisma.prisma"
+      ],
+      "settings": {
+        "files.encoding": "utf8",
+        "files.eol": "\n",
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "editor.tabSize": 2,
+        "editor.formatOnSave": true,
+        "[javascript]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[json]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[css]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        }
       }
+    }
   },
   "forwardPorts": [3000]
 }
