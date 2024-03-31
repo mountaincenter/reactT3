@@ -59,6 +59,7 @@ model User {
     accounts      Account[]
     sessions      Session[]
     posts         Post[]
+    timeLogs      TimeLog[]
 }
 
 model VerificationToken {
@@ -67,4 +68,24 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Tag {
+    id String @id @default(cuid())
+    name String
+    timeLogs TimeLog[] @relation("TagTimeLogs")
+}
+
+model TimeLog {
+    id String @id @default(cuid())
+    startTime DateTime
+    stopTime DateTime
+    recordTime Int
+    description String?
+    category String?
+    tags Tag[] @relation("TagTimeLogs")
+    isActive Boolean @default(true)
+    createdAt DateTime @default(now())
+    userId String
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

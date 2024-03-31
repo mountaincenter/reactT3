@@ -17,9 +17,6 @@ const config = {
         "2xl": "1400px",
       },
     },
-    // fontSize: {
-    //   "10xl": "12rem",
-    // },
     extend: {
       colors: {
         border: "hsl(var(--border))",
@@ -74,6 +71,9 @@ const config = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      fontSize: {
+        "10xl": "12rem",
       },
     },
   },

@@ -1,9 +1,15 @@
 import Head from "next/head";
+import React from "react";
 import Clock from "./_components/Clock";
 import Today from "./_components/Today";
+import LoginAvatar from "./_components/LoninAvatar";
 import { ModeToggle } from "./_components/DarkMode";
+import { useSession } from "next-auth/react";
+import KeepRecordButton from "./_components/KeepRecordButton";
 
 export default function Home() {
+  const { data: session } = useSession();
+
   return (
     <>
       <Head>
@@ -13,11 +19,19 @@ export default function Home() {
       </Head>
       <div className="flex h-screen items-center justify-center bg-gradient-to-b from-gray-100 to-white dark:from-gray-800 dark:to-gray-900">
         <div className="mx:right-10 absolute right-5 top-10 flex gap-2 lg:right-20 ">
+          <LoginAvatar />
           <ModeToggle />
         </div>
-        <div className="lx:gap-20 flex flex-col gap-6 sm:gap-8 md:gap-8 lg:gap-16">
-          <Today />
-          <Clock />
+        <div className="flex h-screen flex-col items-center justify-center">
+          <div className="flex flex-col items-center gap-8">
+            <Today />
+            <Clock />
+          </div>
+          {session && (
+            <div className="mt-8">
+              <KeepRecordButton />
+            </div>
+          )}
         </div>
       </div>
     </>

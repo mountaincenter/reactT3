@@ -18,7 +18,7 @@ const Today = () => {
   }, []);
   return (
     <>
-      <TextAtom size="small">{today}</TextAtom>
+      <TextAtom size="medium">{today}</TextAtom>
     </>
   );
 };
