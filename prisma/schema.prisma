@@ -84,6 +84,7 @@ model TimeLog {
     description String?
     category String?
     tags Tag[] @relation("TagTimeLogs")
+    status String?
     isActive Boolean @default(true)
     createdAt DateTime @default(now())
     userId String
