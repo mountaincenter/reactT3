@@ -18,8 +18,11 @@ interface TimeLogData {
 export const timeLogHandler = {
   list: async (userId: string) =>
     prisma.timeLog.findMany({ where: { userId } }),
-  create: async (data: TimeLogData) => prisma.timeLog.create({ data }),
-  update: async (id: string, data: TimeLogData) =>
-    prisma.timeLog.update({ where: { id }, data }),
+  create: async (data: Omit<TimeLogData, "id" | "createdAt">) =>
+    prisma.timeLog.create({ data: { ...data } }),
+  update: async (
+    id: string,
+    data: Omit<TimeLogData, "id" | "createdAt" | "userId">,
+  ) => prisma.timeLog.update({ where: { id }, data: { ...data } }),
   delete: async (id: string) => prisma.timeLog.delete({ where: { id } }),
 };

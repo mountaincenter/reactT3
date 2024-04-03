@@ -1,6 +1,6 @@
 import { useSession, signIn, signOut } from "next-auth/react";
-import { Button } from "./ui/button";
-import { Avatar, AvatarImage } from "./ui/avatar";
+import { Button } from "~/components/ui/button";
+import { Avatar, AvatarImage } from "~/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,8 +15,6 @@ import { LogOut } from "lucide-react";
 const LoginAvatar = () => {
   const { data: session } = useSession();
 
-  console.log(session);
-  console.log(session?.user.image);
   if (session) {
     return (
       <DropdownMenu>

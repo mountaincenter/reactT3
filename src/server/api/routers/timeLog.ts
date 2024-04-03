@@ -17,7 +17,7 @@ const timeLogSchema = z.object({
 
 const timeLogUpdateSchema = z.object({
   id: z.string(),
-  data: timeLogSchema,
+  data: timeLogSchema.omit({ id: true }),
 });
 
 export const timeLogRouter = createTRPCRouter({
@@ -25,7 +25,7 @@ export const timeLogRouter = createTRPCRouter({
     return await timeLogHandler.list(ctx.session.user.id);
   }),
   create: protectedProcedure
-    .input(timeLogSchema)
+    .input(timeLogSchema.omit({ id: true, createdAt: true }))
     .mutation(async ({ ctx, input }) => {
       return await timeLogHandler.create({
         ...input,
@@ -34,10 +34,9 @@ export const timeLogRouter = createTRPCRouter({
     }),
   update: protectedProcedure
     .input(timeLogUpdateSchema)
-    .mutation(async ({ ctx, input }) => {
+    .mutation(async ({ input }) => {
       return await timeLogHandler.update(input.id, {
         ...input.data,
-        userId: ctx.session.user.id,
       });
     }),
   delete: protectedProcedure

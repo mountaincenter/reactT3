@@ -7,6 +7,8 @@ import { ModeToggle } from "../components/DarkMode";
 import { useSession } from "next-auth/react";
 import KeepRecordButton from "../components/KeepRecordButton";
 
+import TimeLogComponent from "../components/TimeLogComponent";
+
 export default function Home() {
   const { data: session } = useSession();
 
@@ -29,7 +31,7 @@ export default function Home() {
           </div>
           {session && (
             <div className="mt-8">
-              <KeepRecordButton />
+              <TimeLogComponent />
             </div>
           )}
         </div>
