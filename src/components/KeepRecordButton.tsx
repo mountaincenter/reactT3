@@ -6,26 +6,18 @@ import TextAtom from "./atoms/Text/TextAtom";
 
 interface KeepRecordButtonProps {
   isRecording: boolean;
-  startTime: Date | null;
-  stopTime: Date | null;
   elapsedTime: string;
   progress: number | null;
   startRecording: () => void;
   stopRecording: () => void;
-  calculateRecordTime: (start: Date | null, stop: Date | null) => string;
-  formatStartTime: (date: Date | null) => string;
 }
 
 const KeepRecordButton: React.FC<KeepRecordButtonProps> = ({
   isRecording,
-  startTime,
-  stopTime,
   elapsedTime,
   progress,
   startRecording,
   stopRecording,
-  calculateRecordTime,
-  formatStartTime,
 }) => {
   return (
     <div className="flex flex-col items-center gap-10">
@@ -46,11 +38,6 @@ const KeepRecordButton: React.FC<KeepRecordButtonProps> = ({
           Stop
         </Button>
       </div>
-      <TextAtom size="small">Start Time: {formatStartTime(startTime)}</TextAtom>
-      <TextAtom size="small">Stop Time: {formatStartTime(stopTime)}</TextAtom>
-      <TextAtom size="small">
-        Record Time: {calculateRecordTime(startTime, stopTime)}
-      </TextAtom>
       <TextAtom size="small">Elapsed Time: {elapsedTime}</TextAtom>
       <Progress value={progress} max={100}></Progress>
     </div>

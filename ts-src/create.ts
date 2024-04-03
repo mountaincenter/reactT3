@@ -3,11 +3,11 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  const startTime = new Date(new Date().getTime() - 10 * 60000); // 10分前の時刻
-  const stopTime = new Date(); // 現在の時刻
-  const recordTime = Math.floor(
-    (stopTime.getTime() - startTime.getTime()) / 1000,
-  ); // 差分を分で計算
+  const startTime = new Date("2024-04-03T10:42:46.656Z");
+  const stopTime = new Date("2024-04-03T11:42:50.000Z");
+  const recordTimeInMinutes =
+    (stopTime.getTime() - startTime.getTime()) / 60000;
+  const recordTime = Math.ceil(recordTimeInMinutes);
   await prisma.timeLog.create({
     data: {
       startTime: startTime,
