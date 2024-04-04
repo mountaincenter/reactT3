@@ -49,8 +49,18 @@ export const useTimeLogMutation = () => {
         description: "削除に成功しました",
         duration: 3000,
       });
+      setTimeout(() => router.reload(), 3000);
+    },
+    onError: () => {
+      toast({
+        title: "error",
+        description: "削除に失敗しました",
+        duration: 3000,
+      });
     },
   });
 
-  return { createTimeLog, updateTimeLog, deleteTimeLog };
+  const isDeleteLoading = deleteTimeLog.status === "pending";
+
+  return { createTimeLog, updateTimeLog, deleteTimeLog, isDeleteLoading };
 };

@@ -1,5 +1,7 @@
 import type { TimeLog } from "~/server/types";
 import { LoaderCircle } from "lucide-react";
+import TimeLogItem from "~/components/TimeLogItem";
+import useDateTimeFormat from "~/hooks/useDateTimeFormat";
 
 import {
   Table,
@@ -9,7 +11,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "./ui/table";
+} from "~/components/ui/table";
 
 interface TimeLogsProps {
   timeLogs: TimeLog[];
@@ -24,55 +26,7 @@ const TimeLogTable: React.FC<TimeLogsProps> = ({
   stopTime,
   isLoading,
 }) => {
-  const formatDate = (date: Date) => {
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    return `${month}/${day}`;
-  };
-
-  console.log(isLoading);
-  const formatTime = (time: Date) => {
-    const hours = String(time.getHours()).padStart(2, "0");
-    const minutes = String(time.getMinutes()).padStart(2, "0");
-    return `${hours}:${minutes}`;
-  };
-
-  const formatStopTime = (startTime: Date, stopTime: Date) => {
-    if (!stopTime) return "-";
-    const isNextDay =
-      stopTime.getDate() > startTime.getDate() ||
-      stopTime.getMonth() > startTime.getMonth() ||
-      stopTime.getFullYear() > startTime.getFullYear();
-
-    let hours = stopTime.getHours();
-
-    const minutes = String(stopTime.getMinutes()).padStart(2, "0");
-    if (isNextDay) {
-      hours += 24;
-    }
-
-    const formattedHours = String(hours).padStart(2, "0");
-
-    return `${formattedHours}:${minutes}`;
-  };
-
-  const formatRecordTime = (seconds: number) => {
-    let hours = Math.floor(seconds / 3600);
-    let minutes = Math.floor((seconds % 3600) / 60);
-
-    if (seconds % 60 > 0) {
-      minutes += 1;
-    }
-
-    if (minutes >= 60) {
-      hours += 1;
-      minutes -= 60;
-    }
-
-    const formattedHours = String(hours).padStart(2, "0");
-    const formattedMinutes = String(minutes).padStart(2, "0");
-    return `${formattedHours}:${formattedMinutes}`;
-  };
+  const { formatDate, formatTime } = useDateTimeFormat();
 
   if (!timeLogs) return null;
 
@@ -95,6 +49,8 @@ const TimeLogTable: React.FC<TimeLogsProps> = ({
             <TableHead>終了時刻</TableHead>
             <TableHead>経過時間</TableHead>
             <TableHead>状態</TableHead>
+            <TableHead>編集</TableHead>
+            <TableHead>削除</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -111,24 +67,8 @@ const TimeLogTable: React.FC<TimeLogsProps> = ({
               <TableCell>進行中</TableCell>
             </TableRow>
           )}
-          {timeLogs.map((timeLog: TimeLog, index: number) => {
-            return (
-              <TableRow key={index}>
-                <TableCell className="text-right">
-                  {formatDate(timeLog.startTime)}
-                </TableCell>
-                <TableCell className="text-right">
-                  {formatTime(timeLog.startTime)}
-                </TableCell>
-                <TableCell className="text-right">
-                  {formatStopTime(timeLog.startTime, timeLog.stopTime)}
-                </TableCell>
-                <TableCell className="text-right">
-                  {formatRecordTime(timeLog.recordTime)}
-                </TableCell>
-                <TableCell>終了</TableCell>
-              </TableRow>
-            );
+          {timeLogs.map((timeLog: TimeLog) => {
+            return <TimeLogItem key={timeLog.id} timeLog={timeLog} />;
           })}
         </TableBody>
       </Table>
