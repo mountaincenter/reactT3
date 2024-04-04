@@ -17,7 +17,10 @@ interface TimeLogData {
 
 export const timeLogHandler = {
   list: async (userId: string) =>
-    prisma.timeLog.findMany({ where: { userId } }),
+    prisma.timeLog.findMany({
+      where: { userId },
+      orderBy: { startTime: "desc" },
+    }),
   create: async (data: Omit<TimeLogData, "id" | "createdAt">) =>
     prisma.timeLog.create({ data: { ...data } }),
   update: async (

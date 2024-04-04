@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useTimeLogMutation } from "./useTimeLogMutation";
+import { useSession } from "next-auth/react";
 
 const useRecord = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -6,6 +8,8 @@ const useRecord = () => {
   const [stopTime, setStopTime] = useState<Date | null>(null);
   const [elapsedTime, setElapsedTime] = useState<string>("00:00");
   const [progress, setProgress] = useState<number>(0);
+  const { data: session } = useSession();
+  const { createTimeLog } = useTimeLogMutation();
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
@@ -41,10 +45,29 @@ const useRecord = () => {
     setStopTime(null);
   };
 
+  const roundToNearestMinute = (date: Date) => {
+    return new Date(Math.floor(date.getTime() / 60000) * 60000);
+  };
+
   const stopRecording = () => {
+    const stop = new Date();
     setIsRecording(false);
-    setStopTime(new Date());
+    setStopTime(stop);
     setProgress(0);
+    if (session?.user?.id && startTime) {
+      const roundedStartTime = roundToNearestMinute(startTime);
+      const roundedStopTime = roundToNearestMinute(stop);
+      const recordTimeInMinutes =
+        (roundedStopTime.getTime() - roundedStartTime.getTime()) / 60000;
+      const recordTime = recordTimeInMinutes;
+      createTimeLog.mutate({
+        startTime,
+        stopTime: stop,
+        recordTime,
+        status: "finished",
+        isActive: true,
+      });
+    }
   };
 
   const calculateRecordTime = (start: Date | null, stop: Date | null) => {

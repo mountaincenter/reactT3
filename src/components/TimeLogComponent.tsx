@@ -4,7 +4,7 @@ import TimeLogTable from "./TimeLogTable";
 import useRecord from "~/hooks/useRecord";
 
 const TimeLogCompoenent = () => {
-  const { data: timeLogs = [] } = api.timeLog.list.useQuery();
+  const { data: timeLogs = [], isLoading } = api.timeLog.list.useQuery();
   const {
     isRecording,
     startTime,
@@ -13,26 +13,22 @@ const TimeLogCompoenent = () => {
     progress,
     startRecording,
     stopRecording,
-    calculateRecordTime,
-    formatStartTime,
   } = useRecord();
+
   return (
     <>
       <KeepRecordButton
         isRecording={isRecording}
-        startTime={startTime}
-        stopTime={stopTime}
         elapsedTime={elapsedTime}
         progress={progress}
         startRecording={startRecording}
         stopRecording={stopRecording}
-        calculateRecordTime={calculateRecordTime}
-        formatStartTime={formatStartTime}
       />
       <TimeLogTable
         timeLogs={timeLogs}
         startTime={startTime}
         stopTime={stopTime}
+        isLoading={isLoading}
       />
     </>
   );
