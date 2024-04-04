@@ -23,7 +23,7 @@ export default function Home() {
           <ModeToggle />
         </div>
         <div className="flex h-screen flex-col items-center justify-center">
-          <div className="flex flex-col items-center justify-center pt-10 lg:pt-0">
+          <div className="flex flex-col items-center justify-center pt-20 sm:pt-10 lg:pt-0">
             <Today />
             <Clock />
             <Separator />
