@@ -31,7 +31,7 @@ export const useTimeLogMutation = () => {
         description: "更新に成功しました",
         duration: 3000,
       });
-      router.reload();
+      setTimeout(() => router.reload(), 3000);
     },
     onError: () => {
       toast({
@@ -60,7 +60,18 @@ export const useTimeLogMutation = () => {
     },
   });
 
+  // 各操作のisLoading状態を直接参照する
+  const isCreateLoading = createTimeLog.status === "pending";
+  const isUpdateLoading = updateTimeLog.status === "pending";
   const isDeleteLoading = deleteTimeLog.status === "pending";
 
-  return { createTimeLog, updateTimeLog, deleteTimeLog, isDeleteLoading };
+  // どれか一つでもisLoading状態なら、全体としてisLoadingとみなす
+  const isLoading = isCreateLoading || isUpdateLoading || isDeleteLoading;
+
+  return {
+    createTimeLog,
+    updateTimeLog,
+    deleteTimeLog,
+    isLoading,
+  };
 };

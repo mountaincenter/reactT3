@@ -17,7 +17,7 @@ const timeLogSchema = z.object({
 
 const timeLogUpdateSchema = z.object({
   id: z.string(),
-  data: timeLogSchema.omit({ id: true }),
+  data: timeLogSchema.omit({ id: true, createdAt: true, isActive: true }),
 });
 
 export const timeLogRouter = createTRPCRouter({

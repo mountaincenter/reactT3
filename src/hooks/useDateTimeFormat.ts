@@ -13,6 +13,12 @@ const useDateTimeFormat = () => {
     return `${hours}:${minutes}`;
   };
 
+  const formatInputTime = (time: Date) => {
+    const hours = String(time.getHours()).padStart(2, "0");
+    const minutes = String(time.getMinutes()).padStart(2, "0");
+    return `${hours}${minutes}`;
+  };
+
   const formatStopTime = (startTime: Date, stopTime: Date) => {
     if (!stopTime) return "-";
     const isNextDay =
@@ -44,6 +50,7 @@ const useDateTimeFormat = () => {
     () => ({
       formatDate,
       formatTime,
+      formatInputTime,
       formatStopTime,
       formatRecordTime,
     }),

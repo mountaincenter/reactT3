@@ -49,8 +49,8 @@ const TimeLogTable: React.FC<TimeLogsProps> = ({
             <TableHead>終了時刻</TableHead>
             <TableHead>経過時間</TableHead>
             <TableHead>状態</TableHead>
-            <TableHead>編集</TableHead>
-            <TableHead>削除</TableHead>
+            <TableHead></TableHead>
+            <TableHead></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

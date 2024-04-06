@@ -6,7 +6,6 @@ import { cn } from "../lib/utils";
 import { ThemeProvider } from "../components/theme-provider";
 
 import { api } from "~/utils/api";
-
 import "~/styles/globals.css";
 
 const fontSans = FontSans({

@@ -25,7 +25,7 @@ export const timeLogHandler = {
     prisma.timeLog.create({ data: { ...data } }),
   update: async (
     id: string,
-    data: Omit<TimeLogData, "id" | "createdAt" | "userId">,
+    data: Omit<TimeLogData, "id" | "createdAt" | "userId" | "isActive">,
   ) => prisma.timeLog.update({ where: { id }, data: { ...data } }),
   delete: async (id: string) => prisma.timeLog.delete({ where: { id } }),
 };
