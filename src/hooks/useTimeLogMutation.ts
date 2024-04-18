@@ -6,6 +6,9 @@ export const useTimeLogMutation = () => {
   const router = useRouter();
   const { toast } = useToast();
 
+  const { data: timeLogs = [], isLoading: isReadLoading } =
+    api.timeLog.list.useQuery();
+
   const createTimeLog = api.timeLog.create.useMutation({
     onSuccess: () => {
       toast({
@@ -66,9 +69,11 @@ export const useTimeLogMutation = () => {
   const isDeleteLoading = deleteTimeLog.status === "pending";
 
   // どれか一つでもisLoading状態なら、全体としてisLoadingとみなす
-  const isLoading = isCreateLoading || isUpdateLoading || isDeleteLoading;
+  const isLoading =
+    isReadLoading || isCreateLoading || isUpdateLoading || isDeleteLoading;
 
   return {
+    timeLogs,
     createTimeLog,
     updateTimeLog,
     deleteTimeLog,

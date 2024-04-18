@@ -1,7 +1,6 @@
 import type { TimeLog } from "~/server/types";
 import { LoaderCircle } from "lucide-react";
 import TimeLogItem from "~/components/TimeLogItem";
-import useDateTimeFormat from "~/hooks/useDateTimeFormat";
 
 import {
   Table,
@@ -12,6 +11,8 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+
+import { format } from "date-fns";
 
 interface TimeLogsProps {
   timeLogs: TimeLog[];
@@ -26,8 +27,6 @@ const TimeLogTable: React.FC<TimeLogsProps> = ({
   stopTime,
   isLoading,
 }) => {
-  const { formatDate, formatTime } = useDateTimeFormat();
-
   if (!timeLogs) return null;
 
   if (isLoading) {
@@ -57,10 +56,10 @@ const TimeLogTable: React.FC<TimeLogsProps> = ({
           {startTime && !stopTime && (
             <TableRow>
               <TableCell className="text-right">
-                {formatDate(new Date())}
+                {format(new Date(), "MM/dd")}
               </TableCell>
               <TableCell className="text-right">
-                {formatTime(startTime)}
+                {format(startTime, "HH:mm")}
               </TableCell>
               <TableCell className="text-center">-</TableCell>
               <TableCell className="text-center">-</TableCell>

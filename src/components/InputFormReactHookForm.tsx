@@ -1,20 +1,24 @@
 import React, { useState, useEffect, useRef } from "react";
-import useDateTimeFormat from "~/hooks/useDateTimeFormat";
 import type { TimeLog } from "~/server/types";
 import { TableCell } from "~/components/ui/table";
+import { format } from "date-fns";
+import {
+  fromMinutesToHHmm,
+  fomatStopTimeWihtDayExtension,
+} from "~/utils/timeUtils";
 
-interface InputFormTestProps {
+interface InputFormReactHookFormProps {
   timeLog: TimeLog;
 }
 
-const InputFormTest: React.FC<InputFormTestProps> = ({ timeLog }) => {
-  console.log(timeLog);
+const InputFormReactHookForm: React.FC<InputFormReactHookFormProps> = ({
+  timeLog,
+}) => {
   const startTime = timeLog.startTime;
-  const { formatDate, formatTime, formatInputTime, formatRecordTime } =
-    useDateTimeFormat();
+  const stopTime = timeLog.stopTime;
   const [startTimeInput, setStartTimeInput] = useState("");
   const [tempStartInput, setTempStartInput] = useState(
-    formatInputTime(startTime),
+    format(startTime, "HHmm"),
   );
   const [isEdit, setIsEdit] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -40,11 +44,18 @@ const InputFormTest: React.FC<InputFormTestProps> = ({ timeLog }) => {
   };
 
   useEffect(() => {
+    if (isEdit && inputRef.current) {
+      inputRef.current.focus();
+      inputRef.current.select();
+    }
+  }, [isEdit]);
+
+  useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (inputRef.current && !inputRef.current.contains(e.target as Node)) {
         setIsEdit(false);
         if (!tempStartInput) {
-          setTempStartInput(formatInputTime(startTime));
+          setTempStartInput(format(startTime, "HHmm"));
         }
       }
     };
@@ -63,29 +74,36 @@ const InputFormTest: React.FC<InputFormTestProps> = ({ timeLog }) => {
 
   return (
     <>
-      <TableCell>{formatDate(startTime)}</TableCell>
+      <TableCell>{format(startTime, "MM/dd")}</TableCell>
       {isEdit ? (
-        <TableCell>
+        <TableCell className="text-right">
           <input
             type="text"
             ref={inputRef}
             value={tempStartInput}
             onChange={handleInputChange}
-            onKeyDown={handleKeyPress} // Enterキーの押下を検知します。
+            onKeyDown={handleKeyPress}
             autoFocus
             maxLength={4}
             className="text w-12 pl-1"
           />
         </TableCell>
       ) : (
-        <TableCell onClick={() => setIsEdit(true)}>
+        <TableCell
+          className="cursor-pointer text-right"
+          onClick={() => setIsEdit(true)}
+        >
           {convertToDisplayFormat(startTimeInput)}
         </TableCell>
       )}
-      <TableCell>{formatTime(timeLog.stopTime)}</TableCell>
-      <TableCell>{formatRecordTime(timeLog.recordTime)}</TableCell>
+      <TableCell className="text-right">
+        {fomatStopTimeWihtDayExtension(stopTime, startTime)}
+      </TableCell>
+      <TableCell className="text-right">
+        {fromMinutesToHHmm(timeLog.recordTime)}
+      </TableCell>
     </>
   );
 };
 
-export default InputFormTest;
+export default InputFormReactHookForm;
