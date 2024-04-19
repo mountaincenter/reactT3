@@ -65,13 +65,27 @@ export default function AppPrismaRef({
   }, [post, reset]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "name") {
-      setSelectedEdit("content");
-    } else if (selectedEdit === "content") {
-      void handleSubmit(onSubmit)();
+    if (e.key === "Enter") {
+      if (e.shiftKey) {
+        if (selectedEdit === "content") {
+          setSelectedEdit("name");
+          e.preventDefault();
+        } else if (selectedEdit === "name") {
+          setSelectedEdit("content");
+          e.preventDefault();
+        }
+      } else {
+        if (selectedEdit === "name") {
+          setSelectedEdit("content");
+          e.preventDefault();
+        } else if (selectedEdit === "content") {
+          void handleSubmit(onSubmit)();
+        }
+      }
     }
   };
 
+  console.log(selectedEdit);
   return (
     <div>
       <h2>Update Post useRefによるfocus</h2>
@@ -87,12 +101,14 @@ export default function AppPrismaRef({
                 className="text-xl"
                 placeholder={watchedData.name}
                 onKeyDown={handleKeyDown}
+                onClick={() => setSelectedEdit("name")}
               />
               <input
                 {...register("content")}
                 className="text-xl"
                 placeholder={watchedData.content}
                 onKeyDown={handleKeyDown}
+                onClick={() => setSelectedEdit("content")}
               />
             </div>
           ) : (
