@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { api } from "~/utils/api";
 
@@ -16,8 +16,17 @@ type Inputs = {
   content: string;
 };
 
-export default function AppPrismaRef({ post }: { post: Post }) {
-  const [isEdit, setIsEdit] = useState(false);
+interface AppPrismaRefProps {
+  post: Post;
+  isEdit: boolean;
+  setIsEdit: (isEdit: boolean) => void;
+}
+
+export default function AppPrismaRef({
+  post,
+  isEdit,
+  setIsEdit,
+}: AppPrismaRefProps) {
   const updatePost = api.post.update.useMutation();
 
   const { register, handleSubmit, watch, reset } = useForm<Inputs>({
@@ -42,26 +51,6 @@ export default function AppPrismaRef({ post }: { post: Post }) {
     reset({ name: post.name, content: post.content });
   }, [post, reset]);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const form = document.querySelector("form");
-      const target = event.target as HTMLElement;
-      if (form && !form.contains(target) && !target.closest("input")) {
-        console.log("isEditをfalseにします");
-        setIsEdit(false);
-      }
-    };
-
-    if (isEdit) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isEdit]);
   console.log(post);
 
   return (
