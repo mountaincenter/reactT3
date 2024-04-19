@@ -42,6 +42,26 @@ export default function AppPrismaRef({ post }: { post: Post }) {
     reset({ name: post.name, content: post.content });
   }, [post, reset]);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const form = document.querySelector("form");
+      const target = event.target as HTMLElement;
+      if (form && !form.contains(target) && !target.closest("input")) {
+        console.log("isEditをfalseにします");
+        setIsEdit(false);
+      }
+    };
+
+    if (isEdit) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isEdit]);
   console.log(post);
 
   return (
@@ -67,7 +87,12 @@ export default function AppPrismaRef({ post }: { post: Post }) {
               </p>
             </div>
           )}
-          <input type="submit" value="Update" />
+          <input
+            className={`border-2 border-white ${isEdit && watchedData.name && watchedData.content ? "cursor-pointer" : "cursor-not-allowed opacity-50"}`}
+            type="submit"
+            value="Update"
+            disabled={!isEdit || !watchedData.name || !watchedData.content}
+          />
         </div>
       </form>
     </div>
