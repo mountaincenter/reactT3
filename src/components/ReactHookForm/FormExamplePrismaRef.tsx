@@ -20,16 +20,20 @@ interface AppPrismaRefProps {
   post: Post;
   isEdit: boolean;
   setIsEdit: (isEdit: boolean) => void;
+  selectedEdit: "name" | "content" | null;
+  setSelectedEdit: (selectedEdit: "name" | "content" | null) => void;
 }
 
 export default function AppPrismaRef({
   post,
   isEdit,
   setIsEdit,
+  selectedEdit,
+  setSelectedEdit,
 }: AppPrismaRefProps) {
   const updatePost = api.post.update.useMutation();
 
-  const { register, handleSubmit, watch, reset } = useForm<Inputs>({
+  const { register, handleSubmit, watch, reset, setFocus } = useForm<Inputs>({
     defaultValues: { name: post.name, content: post.content },
   });
 
@@ -40,6 +44,7 @@ export default function AppPrismaRef({
         data: { name: data.name, content: data.content },
       });
       setIsEdit(false);
+      setSelectedEdit(null);
     } catch (error) {
       console.error("Error updating post:", error);
     }
@@ -48,10 +53,24 @@ export default function AppPrismaRef({
   const watchedData = watch();
 
   useEffect(() => {
+    if (selectedEdit === "name") {
+      setFocus("name");
+    } else if (selectedEdit === "content") {
+      setFocus("content");
+    }
+  }, [selectedEdit, setFocus]);
+
+  useEffect(() => {
     reset({ name: post.name, content: post.content });
   }, [post, reset]);
 
-  console.log(post);
+  // useEffect(() => {
+  //   if (isEdit && selectedEdit === "name") {
+  //     nameRef.current?.focus();
+  //   } else if (isEdit && selectedEdit === "content") {
+  //     contentRef.current?.focus();
+  //   }
+  // }, [isEdit, selectedEdit]);
 
   return (
     <div>
@@ -63,15 +82,35 @@ export default function AppPrismaRef({
         <div className="flex gap-16">
           {isEdit ? (
             <div className="flex flex-col gap-16">
-              <input {...register("name")} className="text-xl" />
-              <input {...register("content")} className="text-xl" />
+              <input
+                {...register("name")}
+                className="text-xl"
+                placeholder={watchedData.name}
+              />
+              <input
+                {...register("content")}
+                className="text-xl"
+                placeholder={watchedData.content}
+              />
             </div>
           ) : (
             <div className="flex flex-col gap-16">
-              <p className="text-xl" onClick={() => setIsEdit(true)}>
+              <p
+                className="cursor-pointer text-xl"
+                onClick={() => {
+                  setIsEdit(true);
+                  setSelectedEdit("name");
+                }}
+              >
                 {watchedData.name}
               </p>
-              <p className="text-xl" onClick={() => setIsEdit(true)}>
+              <p
+                className="cursor-pointer text-xl"
+                onClick={() => {
+                  setIsEdit(true);
+                  setSelectedEdit("content");
+                }}
+              >
                 {watchedData.content}
               </p>
             </div>
