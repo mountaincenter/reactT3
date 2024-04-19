@@ -64,13 +64,13 @@ export default function AppPrismaRef({
     reset({ name: post.name, content: post.content });
   }, [post, reset]);
 
-  // useEffect(() => {
-  //   if (isEdit && selectedEdit === "name") {
-  //     nameRef.current?.focus();
-  //   } else if (isEdit && selectedEdit === "content") {
-  //     contentRef.current?.focus();
-  //   }
-  // }, [isEdit, selectedEdit]);
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "name") {
+      setSelectedEdit("content");
+    } else if (selectedEdit === "content") {
+      void handleSubmit(onSubmit)();
+    }
+  };
 
   return (
     <div>
@@ -86,11 +86,13 @@ export default function AppPrismaRef({
                 {...register("name")}
                 className="text-xl"
                 placeholder={watchedData.name}
+                onKeyDown={handleKeyDown}
               />
               <input
                 {...register("content")}
                 className="text-xl"
                 placeholder={watchedData.content}
+                onKeyDown={handleKeyDown}
               />
             </div>
           ) : (
