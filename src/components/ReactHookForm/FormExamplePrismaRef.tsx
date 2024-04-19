@@ -54,9 +54,9 @@ export default function AppPrismaRef({
 
   useEffect(() => {
     if (selectedEdit === "name") {
-      setFocus("name");
+      setFocus("name", { shouldSelect: true });
     } else if (selectedEdit === "content") {
-      setFocus("content");
+      setFocus("content", { shouldSelect: true });
     }
   }, [selectedEdit, setFocus]);
 
