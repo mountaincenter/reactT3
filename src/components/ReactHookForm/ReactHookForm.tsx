@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from "react";
-import AppPrisma from "./FormExamplePrisma";
-import AppPrismaRef from "./FormExamplePrismaRef";
+import AppTimeLog from "./FormExampleTimeLog";
 
 import { api } from "~/utils/api";
 
 const ReactHookForm = () => {
-  const { data: posts } = api.post.getAll.useQuery();
-  const post = posts?.[0];
+  const { data: timeLogs } = api.timeLog.list.useQuery();
+  const timeLog = timeLogs?.[0];
 
   const [isEdit, setIsEdit] = useState(false);
-  const [selectedEdit, setSelectedEdit] = useState<"name" | "content" | null>(
-    null,
-  );
+  const [selectedEdit, setSelectedEdit] = useState<
+    "startTime" | "stopTime" | null
+  >(null);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -31,10 +30,9 @@ const ReactHookForm = () => {
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-12">
-        {post && <AppPrisma post={post} />}
-        {post && (
-          <AppPrismaRef
-            post={post}
+        {timeLog && (
+          <AppTimeLog
+            timeLog={timeLog}
             isEdit={isEdit}
             setIsEdit={setIsEdit}
             selectedEdit={selectedEdit}

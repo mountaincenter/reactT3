@@ -20,11 +20,18 @@ interface AppPrismaRefProps {
   post: Post;
   isEdit: boolean;
   setIsEdit: (isEdit: boolean) => void;
-  selectedEdit: "name" | "content" | null;
-  setSelectedEdit: (selectedEdit: "name" | "content" | null) => void;
+  selectedEdit: "name" | "content" | "inputStartTime" | "inputStopTime" | null;
+  setSelectedEdit: (
+    selectedEdit:
+      | "name"
+      | "content"
+      | "inputStartTime"
+      | "inputStopTime"
+      | null,
+  ) => void;
 }
 
-export default function AppPrismaRef({
+export default function AppTimeLog({
   post,
   isEdit,
   setIsEdit,
