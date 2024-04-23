@@ -56,3 +56,17 @@ export const fomatStopTimeWihtDayExtension = (
 - [] object化した2要素をtab及びenterで移動させsubmitで更新できるか
 
 - [] object化した2要素をtab及びenterで移動させ最後の要素でenterを押下げるとsubmitで更新できる
+
+- リレンダリングしないと{displayStartTime}は更新されません<br>
+  ここでwatchedData.startTimeを用いて入力値をそのまま表示したいのですが<br>
+  これですと "HHmm"表記になってしまいます
+
+```javascript
+useEffect(() => {
+  reset({ startTime: inputStartTime, stopTime: inputStopTime });
+}, [inputStartTime, inputStopTime, reset]);
+```
+
+ここで初期値を決めていますが
+inputタグ内では watchedData.StartTimeは"HHmm"の:のない表記
+pタグ内では watchedData.StartTimeは"HH:mm"表記にすることは可能ですか？

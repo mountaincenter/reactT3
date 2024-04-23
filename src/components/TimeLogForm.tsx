@@ -1,104 +1,161 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { TableCell } from "~/components/ui/table";
-import { timeSchema } from "~/utils/timeUtils";
-import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  fromHmmToDate,
+  calculateRecordTime,
+  formatStopTimeWithDayExtension,
+  getDisplayTimes,
+  type DisplayTimes,
+} from "~/utils/timeUtils";
+import type { TimeLog } from "~/server/types";
+import { useTimeLogMutation } from "~/hooks/useTimeLogMutation";
 
+type Inputs = {
+  startTime: string;
+  stopTime: string;
+  recordTime: number;
+};
 interface TimeLogFormProps {
-  defaultValues: {
-    inputStartTime: string;
-    inputStopTime: string;
-  };
-  onSubmit: SubmitHandler<FormValues>;
-  selectedEdit: SelectedEdit;
-  setSelectedEdit: React.Dispatch<React.SetStateAction<SelectedEdit>>;
-}
-
-type SelectedEdit = "inputStartTime" | "inputStopTime" | null;
-
-interface FormValues {
-  inputStartTime: string;
-  inputStopTime: string;
+  timeLog: TimeLog;
+  isEdit: boolean;
+  setIsEdit: (isEdit: boolean) => void;
+  selectedEdit: "startTime" | "stopTime" | null;
+  setSelectedEdit: (selectedEdit: "startTime" | "stopTime" | null) => void;
 }
 
 const TimeLogForm: React.FC<TimeLogFormProps> = ({
-  defaultValues,
-  onSubmit,
+  timeLog,
+  isEdit,
+  setIsEdit,
   selectedEdit,
   setSelectedEdit,
 }) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormValues>({
-    defaultValues,
-    resolver: zodResolver(timeSchema),
+  const { updateTimeLog } = useTimeLogMutation();
+  const { inputStartTime, inputStopTime }: DisplayTimes =
+    getDisplayTimes(timeLog);
+  const { register, handleSubmit, watch, reset, setFocus } = useForm<Inputs>({
+    defaultValues: {
+      startTime: inputStartTime,
+      stopTime: inputStopTime,
+    },
   });
+
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    const updateStartTime: Date = fromHmmToDate(
+      data.startTime,
+      timeLog.startTime,
+    );
+    const updateStopTime: Date = fromHmmToDate(data.stopTime, timeLog.stopTime);
+    const updateRecordTime: number = calculateRecordTime(
+      updateStartTime,
+      updateStopTime,
+    );
+    try {
+      await updateTimeLog.mutateAsync({
+        id: timeLog.id,
+        data: {
+          startTime: updateStartTime,
+          stopTime: updateStopTime,
+          recordTime: updateRecordTime,
+        },
+      });
+
+      setIsEdit(false);
+      setSelectedEdit(null);
+    } catch (error) {
+      console.error("Error updating post:", error);
+    }
+  };
+
+  const watchedData = watch();
+
+  useEffect(() => {
+    if (selectedEdit === "startTime") {
+      setFocus("startTime", { shouldSelect: true });
+    } else if (selectedEdit === "stopTime") {
+      setFocus("stopTime", { shouldSelect: true });
+    }
+  }, [selectedEdit, setFocus]);
+
+  useEffect(() => {
+    reset({ startTime: inputStartTime, stopTime: inputStopTime });
+  }, [inputStartTime, inputStopTime, reset]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      if (selectedEdit === "inputStartTime") {
-        setSelectedEdit("inputStopTime");
-      } else if (selectedEdit === "inputStopTime") {
+      if (selectedEdit === "startTime") {
+        setSelectedEdit("stopTime");
+      } else if (selectedEdit === "stopTime") {
         void handleSubmit(onSubmit)();
       }
     } else if (e.key === "Tab") {
       e.preventDefault();
-      if (selectedEdit === "inputStartTime") {
-        setSelectedEdit("inputStopTime");
-      } else if (selectedEdit === "inputStopTime") {
-        setSelectedEdit("inputStartTime");
+      if (selectedEdit === "startTime") {
+        setSelectedEdit("stopTime");
+      } else if (selectedEdit === "stopTime") {
+        setSelectedEdit("startTime");
       }
     }
   };
 
+  const formatTime = (time: string): string => {
+    const hours = time.slice(0, 2);
+    const minutes = time.slice(2);
+    return `${hours}:${minutes}`;
+  };
+
+  const formatStopTime = (startTime: string, stopTime: string): string => {
+    const startDate = fromHmmToDate(startTime, timeLog.startTime);
+    const stopDate = fromHmmToDate(stopTime, timeLog.stopTime);
+    return formatStopTimeWithDayExtension(startDate, stopDate);
+  };
+
+  console.log(isEdit);
   return (
     <>
       <TableCell>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          {selectedEdit === "inputStartTime" ? (
+        {isEdit ? (
+          <form onSubmit={handleSubmit(onSubmit)}>
             <input
-              {...register("inputStartTime")}
+              {...register("startTime")}
               className="text w-12 pl-1"
               onKeyDown={handleKeyDown}
             />
-          ) : (
-            <span
-              onClick={() => setSelectedEdit("inputStartTime")}
-              className="cursor-pointer"
-            >
-              {defaultValues.inputStartTime}
-            </span>
-          )}
-          {errors.inputStartTime && (
-            <span className="text-red-500">
-              {errors.inputStartTime.message}
-            </span>
-          )}
-        </form>
+          </form>
+        ) : (
+          <span
+            onClick={() => {
+              setIsEdit(true);
+              setSelectedEdit("startTime");
+            }}
+            className="cursor-pointer"
+          >
+            {formatTime(watchedData.startTime)}
+          </span>
+        )}
       </TableCell>
       <TableCell>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          {selectedEdit === "inputStopTime" ? (
+        {isEdit ? (
+          <form onSubmit={handleSubmit(onSubmit)}>
             <input
-              {...register("inputStopTime")}
+              {...register("stopTime")}
               className="text w-12 pl-1"
               onKeyDown={handleKeyDown}
             />
-          ) : (
-            <span
-              onClick={() => setSelectedEdit("inputStopTime")}
-              className="cursor-pointer"
-            >
-              {defaultValues.inputStopTime}
-            </span>
-          )}
-          {errors.inputStopTime && (
-            <span className="text-red-500">{errors.inputStopTime.message}</span>
-          )}
-        </form>
+          </form>
+        ) : (
+          <span
+            onClick={() => {
+              setIsEdit(true);
+              setSelectedEdit("stopTime");
+            }}
+            className="cursor-pointer"
+          >
+            {formatStopTime(watchedData.startTime, watchedData.stopTime)}
+          </span>
+        )}
       </TableCell>
     </>
   );

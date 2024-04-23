@@ -1,3 +1,4 @@
+import React from "react";
 import type { TimeLog } from "~/server/types";
 import { LoaderCircle } from "lucide-react";
 import TimeLogItem from "~/components/TimeLogItem";

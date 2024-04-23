@@ -32,7 +32,7 @@ export const fromMinutesToHHmm = (minutes: number): string => {
   return `${formattedHours}:${formattedMinutes}`;
 };
 
-export const fomatStopTimeWihtDayExtension = (
+export const formatStopTimeWithDayExtension = (
   startTime: Date,
   stopTime: Date,
 ): string => {
@@ -95,7 +95,7 @@ export const getDisplayTimes = (timeLog: TimeLog): DisplayTimes => {
   const displayStartTime = format(timeLog.startTime, "HH:mm");
   const displayRecordTime = fromMinutesToHHmm(timeLog.recordTime);
   const inputStartTime = format(timeLog.startTime, "HHmm");
-  const displayStopTime = fomatStopTimeWihtDayExtension(
+  const displayStopTime = formatStopTimeWithDayExtension(
     timeLog.startTime,
     timeLog.stopTime,
   );
