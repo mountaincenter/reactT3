@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import { useTimeLogMutation } from "./useTimeLogMutation";
 import { useSession } from "next-auth/react";
+import { differenceInSeconds, differenceInMinutes } from "date-fns";
+
+import { roundedToNearestMinute } from "~/utils/timeUtils";
 
 const useRecord = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -17,7 +20,7 @@ const useRecord = () => {
     if (isRecording && startTime) {
       interval = setInterval(() => {
         const now = new Date();
-        const totalSeconds = (now.getTime() - startTime.getTime()) / 1000;
+        const totalSeconds = differenceInSeconds(now, startTime);
         const hours = Math.floor(totalSeconds / 3600)
           .toString()
           .padStart(2, "0");
@@ -45,21 +48,14 @@ const useRecord = () => {
     setStopTime(null);
   };
 
-  const roundToNearestMinute = (date: Date) => {
-    return new Date(Math.floor(date.getTime() / 60000) * 60000);
-  };
-
   const stopRecording = () => {
-    const stop = new Date();
+    const stop = roundedToNearestMinute(new Date());
     setIsRecording(false);
     setStopTime(stop);
     setProgress(0);
     if (session?.user?.id && startTime) {
-      const roundedStartTime = roundToNearestMinute(startTime);
-      const roundedStopTime = roundToNearestMinute(stop);
-      const recordTimeInMinutes =
-        (roundedStopTime.getTime() - roundedStartTime.getTime()) / 60000;
-      const recordTime = recordTimeInMinutes;
+      const roundedStartTime = roundedToNearestMinute(startTime);
+      const recordTime = differenceInMinutes(stop, roundedStartTime);
       createTimeLog.mutate({
         startTime,
         stopTime: stop,
@@ -70,22 +66,6 @@ const useRecord = () => {
     }
   };
 
-  const calculateRecordTime = (start: Date | null, stop: Date | null) => {
-    if (!start || !stop) return "";
-
-    const diff = stop.getTime() - start.getTime();
-    const seconds = Math.floor((diff / 1000) % 60);
-    const minutes = Math.floor((diff / 1000 / 60) % 60);
-    const hours = Math.floor(diff / 1000 / 60 / 60);
-
-    return `${hours ? `${hours}:` : ""}${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-  };
-
-  const formatStartTime = (date: Date | null) => {
-    if (date === null) return "";
-    return `${date.getHours()}:${date.getMinutes().toString().padStart(2, "0")}:${date.getSeconds().toString().padStart(2, "0")}`;
-  };
-
   return {
     isRecording,
     startTime,
@@ -94,8 +74,6 @@ const useRecord = () => {
     progress,
     startRecording,
     stopRecording,
-    calculateRecordTime,
-    formatStartTime,
   };
 };
 

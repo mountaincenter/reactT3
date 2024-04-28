@@ -1,10 +1,10 @@
-import { api } from "~/utils/api";
-import KeepRecordButton from "./KeepRecordButton";
-import TimeLogTable from "./TimeLogTable";
+import KeepRecordButton from "~/components/KeepRecordButton";
+import TimeLogTable from "~/components/TimeLogTable";
 import useRecord from "~/hooks/useRecord";
+import { useTimeLogMutation } from "~/hooks/useTimeLogMutation";
 
 const TimeLogCompoenent = () => {
-  const { data: timeLogs = [], isLoading } = api.timeLog.list.useQuery();
+  const { timeLogs, isLoading } = useTimeLogMutation();
   const {
     isRecording,
     startTime,
@@ -23,6 +23,7 @@ const TimeLogCompoenent = () => {
         progress={progress}
         startRecording={startRecording}
         stopRecording={stopRecording}
+        isLoading={isLoading}
       />
       <TimeLogTable
         timeLogs={timeLogs}

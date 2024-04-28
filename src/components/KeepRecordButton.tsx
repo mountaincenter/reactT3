@@ -10,6 +10,7 @@ interface KeepRecordButtonProps {
   progress: number | null;
   startRecording: () => void;
   stopRecording: () => void;
+  isLoading: boolean;
 }
 
 const KeepRecordButton: React.FC<KeepRecordButtonProps> = ({
@@ -18,13 +19,16 @@ const KeepRecordButton: React.FC<KeepRecordButtonProps> = ({
   progress,
   startRecording,
   stopRecording,
+  isLoading,
 }) => {
+  const cursorStyle = isLoading ? "cursor-wait" : "cursor-pointer";
+  console.log(isLoading);
   return (
     <div className="flex flex-col items-center gap-10">
       <div className="flex items-center gap-8">
         <Button
           onClick={startRecording}
-          disabled={isRecording}
+          disabled={isRecording || isLoading}
           className="rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
         >
           Start
@@ -32,8 +36,8 @@ const KeepRecordButton: React.FC<KeepRecordButtonProps> = ({
         <Button
           variant="destructive"
           onClick={stopRecording}
-          disabled={!isRecording}
-          className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          disabled={!isRecording || isLoading}
+          className={`${cursorStyle} rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 `}
         >
           Stop
         </Button>

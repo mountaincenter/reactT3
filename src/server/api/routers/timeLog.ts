@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { timeLogHandler } from "../handlers/timeLog";
+// import type { inferProcedureInput } from "@trpc/server";
 
 // Define TimeLog input validation schema
 const timeLogSchema = z.object({
@@ -15,10 +16,20 @@ const timeLogSchema = z.object({
   createdAt: z.date(),
 });
 
-const timeLogUpdateSchema = z.object({
-  id: z.string(),
-  data: timeLogSchema.omit({ id: true }),
-});
+const timeLogUpdateSchema = z
+  .object({
+    id: z.string(),
+    data: timeLogSchema.omit({ id: true, createdAt: true, isActive: true }),
+  })
+  .refine(
+    (data) => {
+      return data.data.startTime <= data.data.stopTime;
+    },
+    {
+      message: "Start time must be earlier then or equal to stop time",
+      path: ["data", "startTime"],
+    },
+  );
 
 export const timeLogRouter = createTRPCRouter({
   list: protectedProcedure.query(async ({ ctx }) => {

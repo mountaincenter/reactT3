@@ -3,11 +3,14 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  const allUsers = await prisma.user.findMany();
-  const allTimeLogs = await prisma.timeLog.findMany();
+  await prisma.post.update({
+    where: { id: 2 },
+    data: {
+      name: "testExample",
+      content: "contentExample",
+    },
+  });
   const allPosts = await prisma.post.findMany();
-  console.log(allUsers);
-  console.log(allTimeLogs);
   console.log(allPosts);
 }
 

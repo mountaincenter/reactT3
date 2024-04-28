@@ -1,12 +1,14 @@
 import Head from "next/head";
 import React from "react";
-import Clock from "../components/Clock";
-import Today from "../components/Today";
-import LoginAvatar from "../components/LoninAvatar";
-import { ModeToggle } from "../components/DarkMode";
+import Clock from "~/components/Clock";
+import Today from "~/components/Today";
+import LoginAvatar from "~/components/LoninAvatar";
+import { ModeToggle } from "~/components/DarkMode";
 import { Separator } from "~/components/ui/separator";
 import { Toaster } from "~/components/ui/toaster";
-import TimeLogComponent from "../components/TimeLogComponent";
+import TimeLogComponent from "~/components/TimeLogComponent";
+
+// import ReactHookForm from "~/components/ReactHookForm/ReactHookForm";
 
 export default function Home() {
   return (
@@ -23,7 +25,7 @@ export default function Home() {
           <ModeToggle />
         </div>
         <div className="flex h-screen flex-col items-center justify-center">
-          <div className="flex flex-col items-center justify-center pt-10 lg:pt-0">
+          <div className="flex flex-col items-center justify-center pt-20 sm:pt-10 lg:pt-0">
             <Today />
             <Clock />
             <Separator />
@@ -32,6 +34,7 @@ export default function Home() {
             <TimeLogComponent />
           </div>
         </div>
+        {/* <ReactHookForm /> */}
       </div>
     </>
   );

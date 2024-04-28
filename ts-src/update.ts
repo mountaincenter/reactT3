@@ -3,18 +3,17 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  const startTime = new Date("2024-04-10T13:42:46.656Z");
-  const stopTime = new Date("2024-04-11T16:42:50.000Z");
+  const startTime = new Date("2024-04-10T13:42:00.000Z");
+  const stopTime = new Date("2024-04-10T16:42:00.000Z");
   const recordTimeInMinutes =
     (stopTime.getTime() - startTime.getTime()) / 60000;
   const recordTime = Math.ceil(recordTimeInMinutes);
-  await prisma.timeLog.create({
+  await prisma.timeLog.update({
+    where: { id: "cluuv2ygd000113eshdy1ozkz" },
     data: {
       startTime: startTime,
       stopTime: stopTime,
       recordTime: recordTime,
-      status: "finished",
-      userId: "cluftuk4k00004sseyhnfx4bn",
     },
   });
   const allTimeLogs = await prisma.timeLog.findMany();

@@ -6,6 +6,9 @@ export const useTimeLogMutation = () => {
   const router = useRouter();
   const { toast } = useToast();
 
+  const { data: timeLogs = [], isLoading: isReadLoading } =
+    api.timeLog.list.useQuery();
+
   const createTimeLog = api.timeLog.create.useMutation({
     onSuccess: () => {
       toast({
@@ -31,7 +34,7 @@ export const useTimeLogMutation = () => {
         description: "更新に成功しました",
         duration: 3000,
       });
-      router.reload();
+      setTimeout(() => router.reload(), 3000);
     },
     onError: () => {
       toast({
@@ -49,8 +52,31 @@ export const useTimeLogMutation = () => {
         description: "削除に成功しました",
         duration: 3000,
       });
+      setTimeout(() => router.reload(), 3000);
+    },
+    onError: () => {
+      toast({
+        title: "error",
+        description: "削除に失敗しました",
+        duration: 3000,
+      });
     },
   });
 
-  return { createTimeLog, updateTimeLog, deleteTimeLog };
+  // 各操作のisLoading状態を直接参照する
+  const isCreateLoading = createTimeLog.status === "pending";
+  const isUpdateLoading = updateTimeLog.status === "pending";
+  const isDeleteLoading = deleteTimeLog.status === "pending";
+
+  // どれか一つでもisLoading状態なら、全体としてisLoadingとみなす
+  const isLoading =
+    isReadLoading || isCreateLoading || isUpdateLoading || isDeleteLoading;
+
+  return {
+    timeLogs,
+    createTimeLog,
+    updateTimeLog,
+    deleteTimeLog,
+    isLoading,
+  };
 };
