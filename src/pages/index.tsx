@@ -2,11 +2,11 @@ import Head from "next/head";
 import React from "react";
 import Clock from "~/components/Clock";
 import Today from "~/components/Today";
-import LoginAvatar from "~/components/LoninAvatar";
-import { ModeToggle } from "~/components/DarkMode";
+import LoginAvatar from "~/components/common/LoninAvatar";
+import { ModeToggle } from "~/components/common/DarkMode";
 import { Separator } from "~/components/ui/separator";
 import { Toaster } from "~/components/ui/toaster";
-import TimeLogComponent from "~/components/TimeLogComponent";
+import TimeLogComponent from "~/components/TimeLog/TimeLogComponent";
 
 // import ReactHookForm from "~/components/ReactHookForm/ReactHookForm";
 

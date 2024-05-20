@@ -1,5 +1,5 @@
-import KeepRecordButton from "~/components/KeepRecordButton";
-import TimeLogTable from "~/components/TimeLogTable";
+import KeepRecordButton from "~/components/TimeLog/KeepRecordButton";
+import TimeLogTable from "~/components/TimeLog/TimeLogTable";
 import useRecord from "~/hooks/useRecord";
 import { useTimeLogMutation } from "~/hooks/useTimeLogMutation";
 

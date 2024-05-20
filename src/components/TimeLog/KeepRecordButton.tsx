@@ -1,8 +1,8 @@
 import React from "react";
-import { Button } from "./ui/button";
-import { Progress } from "./ui/progress";
+import { Button } from "../ui/button";
+import { Progress } from "../ui/progress";
 
-import TextAtom from "./atoms/Text/TextAtom";
+import TextAtom from "../atoms/Text/TextAtom";
 
 interface KeepRecordButtonProps {
   isRecording: boolean;
